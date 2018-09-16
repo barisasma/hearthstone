@@ -105,8 +105,8 @@ public final class GamePlay {
 
 	private static void playerTurn(Board board, String key) {
 		try {
-			Integer valueOf = Integer.valueOf(key);
-			board.playCard(valueOf);
+			Integer index = Integer.valueOf(key);
+			board.playCard(index);
 			System.out.println(board.getPlayer().printHand());
 		} catch (Exception e) {
 			System.out.println("There is no such a card! ");
