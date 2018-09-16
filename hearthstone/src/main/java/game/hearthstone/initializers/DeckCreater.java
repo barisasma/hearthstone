@@ -7,6 +7,9 @@ import game.hearthstone.card.Card;
 
 public final class DeckCreater {
 	
+	private DeckCreater() {
+	}
+	
 	private static List<Card> deck = new ArrayList<>();
 	
 	static {

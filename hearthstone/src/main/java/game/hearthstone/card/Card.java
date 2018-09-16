@@ -1,6 +1,6 @@
 package game.hearthstone.card;
 
-public class Card {
+public final class Card {
 	
 	private String name;
 	private int mana;
