@@ -9,14 +9,12 @@ import game.hearthstone.player.Player;
 
 public final class GamePlay {
 
-	private static BufferedReader bufferedReader;
+	private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String[] args) throws IOException {
 		try {
-			bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 			giveInstructions();
 			Player player1 = chooseNamesAndCreate(1);
-			
 			Player player2 = chooseNamesAndCreate(2);
 			initAndStartGame(player1, player2);
 		} catch (IOException e) {
@@ -26,7 +24,7 @@ public final class GamePlay {
 		}
 	}
 
-	private static Player chooseNamesAndCreate(int playerNum) throws IOException {
+	public static Player chooseNamesAndCreate(int playerNum) throws IOException {
 		System.out.println("Enter nick for " + playerNum + ". player: ");
 		return createPlayer(bufferedReader.readLine());
 	}
@@ -37,7 +35,7 @@ public final class GamePlay {
 		return player;
 	}
 
-	private static void initAndStartGame(Player player, Player opponent) throws IOException {
+	public static void initAndStartGame(Player player, Player opponent) throws IOException {
 		int roll = initBeginningPlayer();
 		if (roll != 0) {
 			Player tempplayer = player;
@@ -47,7 +45,7 @@ public final class GamePlay {
 		startTheGame(player, opponent);
 	}
 
-	private static void startTheGame(Player player, Player opponent) throws IOException {
+	public static void startTheGame(Player player, Player opponent) throws IOException {
 		int turn = 1;
 		Board board = new Board(player, opponent);
 		while (board.isOngoing()) {
