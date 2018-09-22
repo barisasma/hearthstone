@@ -6,7 +6,7 @@ import java.util.Random;
 
 import game.hearthstone.card.Card;
 import game.hearthstone.player.Player;
-import game.heartstone.card.logs.Notifier;
+import game.heartstone.logs.Notifier;
 
 public class Board {
 

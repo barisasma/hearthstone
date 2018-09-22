@@ -1,4 +1,4 @@
-package game.heartstone.card.logs;
+package game.heartstone.logs;
 
 import game.hearthstone.card.Card;
 import game.hearthstone.player.Player;

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Random;
 import game.hearthstone.initializers.DeckCreater;
 import game.hearthstone.player.Player;
-import game.heartstone.card.logs.GameplayNotifier;
+import game.heartstone.logs.GameplayNotifier;
 
 public final class GamePlay {
 
