@@ -62,18 +62,19 @@ public class GameTest {
 		int turns = 1;
 		Board board = new Board(firstPlayer, secondPlayer);
 		while (board.isOngoing()) {
-			if (board.isOngoing()) {
-				play(board, turns);
-				board.switchPlayers();
-			}
-			if (board.isOngoing()) {
-				play(board, turns);
-				board.switchPlayers();
-			}
+			isGoindAndPlay(turns, board);
+			isGoindAndPlay(turns, board);
 			turns++;
 		}
 		Player winner = Decider.checkHealthsAndFindWinner(board);
 		declareWinner(winner, turns);
+	}
+
+	private void isGoindAndPlay(int turns, Board board) {
+		if (board.isOngoing()) {
+			play(board, turns);
+			board.switchPlayers();
+		}
 	}
 
 	private void play(Board board, int turnNumber) {
@@ -97,16 +98,17 @@ public class GameTest {
 		Card playedCard = board.getPlayer().getHand().get(randomCardIndex - 1);
 		System.out.println("Defender: " + board.getOpponent().getNick() + " Health Before Attack: " + board.getOpponent().getHealth());
 		System.out.println("Attacker Hand Before Attack: ");
-		System.out.println(board.getPlayer().printHand());
+		board.getPlayer().printHand();
 		System.out.println("Attacker: " + board.getPlayer().getNick() + " Health: " + board.getPlayer().getHealth()
 				+ " Attacker Mana: " + board.getPlayer().getMana() + " Last Played Card: " + playedCard);
 		board.playCard(randomCardIndex);
 		System.out.println("Attacker Hand After Attack: ");
-		System.out.println(board.getPlayer().printHand());
+		board.getPlayer().printHand();
 	}
 
 	private static void declareWinner(Player player, int turnNumber) {
-		System.out.println("Turn: " + turnNumber + " "+ Decider.winPrint(player));
+		System.out.println("Turn: " + turnNumber + " ");
+		Decider.winPrint(player);
 		Assert.assertEquals(true, player.getHealth() >= 0);
 	}
 

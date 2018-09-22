@@ -6,6 +6,7 @@ import java.util.Random;
 
 import game.hearthstone.card.Card;
 import game.hearthstone.player.Player;
+import game.heartstone.card.logs.Notifier;
 
 public class Board {
 
@@ -25,9 +26,7 @@ public class Board {
 			consumeMana(card);
 			player.getHand().remove(index - 1);
 			damage(card);
-			System.out.println("Damage done: " + card.getMana());
-			System.out.println("Opponent remaining health: " + opponent.getHealth());
-			System.out.println("Your Mana: " + player.getMana());
+			Notifier.notifyPlayingCard(player, opponent, card);
 		} else
 			System.out.println("Not enough mana");
 		setOngoing();
@@ -59,7 +58,7 @@ public class Board {
 		if (player.isNotOverload() && cardPicked.isPresent()) {
 			player.getHand().add(cardPicked.get());
 		} else if (!player.isNotOverload() && cardPicked.isPresent()) {
-			System.out.println("Your hand is full, card is discarded :" + cardPicked.get());
+			Notifier.notifyDiscard(cardPicked.get());
 		}
 	}
 
@@ -81,7 +80,7 @@ public class Board {
 	private void bleed() {
 		player.setHealth(player.getHealth() - 1);
 		setOngoing();
-		System.out.println("Your deck is empty, bleed out reamining health: " + player.getHealth());
+		Notifier.notifyBleed(player);
 	}
 
 	private void setOngoing() {

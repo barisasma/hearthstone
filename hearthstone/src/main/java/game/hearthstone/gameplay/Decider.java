@@ -14,8 +14,8 @@ public final class Decider {
 		return board.getPlayer();
 	}
 	
-	public static String winPrint(Player player) {
-		return player.getNick() + " Win! with HP: " + player.getHealth();
+	public static void winPrint(Player player) {
+		System.out.println(player.getNick() + " Win! with HP: " + player.getHealth()); 
 	}
 
 }

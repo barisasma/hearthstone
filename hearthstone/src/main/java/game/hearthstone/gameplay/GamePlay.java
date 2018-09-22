@@ -6,32 +6,33 @@ import java.io.InputStreamReader;
 import java.util.Random;
 import game.hearthstone.initializers.DeckCreater;
 import game.hearthstone.player.Player;
+import game.heartstone.card.logs.GameplayNotifier;
 
 public final class GamePlay {
 
 	private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-	public static void main(String[] args) throws IOException {
-		try {
-			giveInstructions();
-			Player player1 = chooseNamesAndCreate(1);
-			Player player2 = chooseNamesAndCreate(2);
-			initAndStartGame(player1, player2);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			bufferedReader.close();
-		}
-	}
+//	public static void main(String[] args) throws IOException {
+//		try {
+//			GameplayNotifier.giveInstructions();
+//			Player player1 = chooseNamesAndCreate(1);
+//			Player player2 = chooseNamesAndCreate(2);
+//			initAndStartGame(player1, player2);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//			bufferedReader.close();
+//		}
+//	}
 
 	public static Player chooseNamesAndCreate(int playerNum) throws IOException {
-		System.out.println("Enter nick for " + playerNum + ". player: ");
+		GameplayNotifier.notifyNickName(playerNum);
 		return createPlayer(bufferedReader.readLine());
 	}
 
 	private static Player createPlayer(String nick) {
 		Player player = new Player(nick, DeckCreater.getDeck());
-		System.out.println("Player initialized: " + player.getNick());
+		GameplayNotifier.notifyPlayerInit(player);
 		return player;
 	}
 
@@ -49,16 +50,18 @@ public final class GamePlay {
 		int turn = 1;
 		Board board = new Board(player, opponent);
 		while (board.isOngoing()) {
-			if (board.isOngoing()) {
-				playAndSwitch(board, turn);
-			}
-			if (board.isOngoing()) {
-				playAndSwitch(board, turn);
-			}
+			isGoingAndPlay(turn, board);
+			isGoingAndPlay(turn, board);
 			turn++;
 		}
 		Player winner = Decider.checkHealthsAndFindWinner(board);
-		System.out.println(Decider.winPrint(winner));
+		Decider.winPrint(winner);
+	}
+
+	private static void isGoingAndPlay(int turn, Board board) throws IOException {
+		if (board.isOngoing()) {
+			playAndSwitch(board, turn);
+		}
 	}
 
 	private static void playAndSwitch(Board board, int turn) throws IOException {
@@ -69,53 +72,37 @@ public final class GamePlay {
 	private static int initBeginningPlayer() throws IOException {
 		String key;
 		Random random = new Random();
-		printReRollLog();
+		GameplayNotifier.notifyReRoll();
 		while (!(key = bufferedReader.readLine()).equalsIgnoreCase("R")) {
-			System.out.println("Not valid key");
-			printReRollLog();
+			GameplayNotifier.notifyInvalidKey();
+			GameplayNotifier.notifyReRoll();
 		}
 		return random.nextInt(2);
-	}
-	
-	private static void printReRollLog() {
-		System.out.println("Press R for roll and start the game");
 	}
 
 	private static void playGame(Board board, int turn) throws IOException {
 		board.turn(turn);
-		playerTurnLog(board);
-		System.out.println("Play your Card: ");
-		System.out.println(board.getPlayer().printHand());
+		GameplayNotifier.playerTurnLog(board);
+		GameplayNotifier.notifyPlayYourCard();
+		board.getPlayer().printHand();
 		String key;
 		while (!(key = bufferedReader.readLine()).equalsIgnoreCase("E")) {
 			playerTurn(board, key);
-			System.out.println("");
-			System.out.println(board.getPlayer().getNick() + " turn: ");
+			GameplayNotifier.notifyPlayerTurn(board);
 		}
-	}
-	
-	private static void playerTurnLog(Board board) {
-		System.out.println("");
-		System.out.println(board.getPlayer().getNick() + " turn: " + " Health: " + board.getPlayer().getHealth() + 
-				" Mana: " + board.getPlayer().getMana()+
-				" Opponent HP: " + board.getOpponent().getHealth());
 	}
 
 	private static void playerTurn(Board board, String key) {
 		try {
 			Integer index = Integer.valueOf(key);
 			board.playCard(index);
-			System.out.println(board.getPlayer().printHand());
+			board.getPlayer().printHand();
 		} catch (Exception e) {
-			System.out.println("There is no such a card! ");
+			e.printStackTrace();
+			GameplayNotifier.notifyNoCard();
 		}
 	}
 
-	private static void giveInstructions() {
-		System.out.println("Simple instruction about game: ");
-		System.out.println("R for rolling decide which one starts the game");
-		System.out.println("Use 1-5 numbers to play your cards");
-		System.out.println("E for ending your turn");
-	}
+	
 
 }

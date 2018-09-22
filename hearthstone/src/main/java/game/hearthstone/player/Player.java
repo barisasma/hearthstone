@@ -58,13 +58,13 @@ public final class Player {
 		return deck;
 	}
 
-	public String printHand() {
+	public void printHand() {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < hand.size(); i++) {
 			builder.append(i + 1).append(". Name: ").append(hand.get(i).getName()).append(" Mana: ")
 					.append(hand.get(i).getMana()).append("\n");
 		}
-		return builder.toString();
+		System.out.println(builder.toString());
 	}
 
 	@Override
